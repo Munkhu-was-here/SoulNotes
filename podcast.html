@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Podcast - Soul Notes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span class="brand-top">PODCAST</span>
+          <strong>Soul Notes</strong>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Нүүр</a>
+        <a class="active" href="podcast.html">Podcast</a>
+        <a href="contact.html">Захидал</a>
+      </nav>
+
+      <button id="menuBtn" class="menu-btn" type="button">☰</button>
+    </div>
+
+    <div id="mobileNav" class="mobile-nav container">
+      <a href="index.html">Нүүр</a>
+      <a href="podcast.html">Podcast</a>
+      <a href="contact.html">Захидал</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro">
+      <span class="pill">Podcast Library</span>
+      <h1>Подкастын бүх дугаар</h1>
+      <p>
+        Эндээс бүх дугаараа үзэж, сонсож, видео эсвэл аудио хэлбэрээр татаж авч болно.
+      </p>
+    </section>
+
+    <section class="podcast-controls">
+      <input
+        type="text"
+        id="podcastSearch"
+        class="podcast-search"
+        placeholder="Подкаст хайх..."
+      />
+    </section>
+
+    <section class="podcast-layout-new">
+      <div class="podcast-player-wrap card-soft podcast-player-premium">
+        <div class="podcast-player-topline">
+          <span class="player-badge">Soul Notes Player</span>
+          <span id="podcastDate" class="podcast-date"></span>
+        </div>
+
+        <div class="podcast-player-media premium-media-frame custom-player">
+          <video id="mainVideo" playsinline></video>
+
+          <div class="player-overlay">
+            <button id="playBtn" class="play-btn" type="button">▶</button>
+          </div>
+
+          <div class="player-controls">
+            <span id="currentTime">0:00</span>
+            <input id="progressBar" type="range" min="0" max="100" value="0" />
+            <span id="duration">0:00</span>
+          </div>
+        </div>
+
+        <div class="podcast-player-content premium-player-content">
+          <div class="premium-player-header">
+            <div>
+              <h2 id="podcastTitle">Подкаст ачаалж байна...</h2>
+              <p id="podcastDescription"></p>
+            </div>
+          </div>
+
+          <div class="premium-player-actions">
+            <button id="videoMode" class="btn btn-secondary" type="button">🎬 Video</button>
+            <button id="audioMode" class="btn btn-secondary" type="button">🎧 Audio</button>
+            <button id="downloadBtn" class="btn btn-primary" type="button">Татах</button>
+            <a href="contact.html" class="btn btn-secondary">Захиа илгээх</a>
+          </div>
+        </div>
+      </div>
+
+      <aside class="podcast-list-wrap card-soft">
+        <div class="podcast-list-head">
+          <h3>Дугаарууд</h3>
+          <span id="podcastCount">0 дугаар</span>
+        </div>
+
+        <div id="podcastList" class="podcast-list-new"></div>
+      </aside>
+    </section>
+  </main>
+
+  <div id="downloadModal" class="popup-modal hidden">
+    <div class="popup-backdrop"></div>
+    <div class="popup-box">
+      <button id="closeDownloadModal" class="popup-close" type="button">×</button>
+      <h3>Татах сонголт</h3>
+      <p>Ямар хэлбэрээр татах вэ?</p>
+
+      <div class="download-choice-grid">
+        <a id="downloadVideoLink" class="download-choice" href="#" download>
+          <span>🎬</span>
+          <strong>Видео татах</strong>
+        </a>
+
+        <a id="downloadAudioLink" class="download-choice" href="#" download>
+          <span>🎧</span>
+          <strong>Аудио татах</strong>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/podcast.js"></script>
+</body>
+</html>

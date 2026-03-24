@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#8b5cf6" />
+  <link rel="icon" href="assets/favicon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soul Notes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span class="brand-top">PODCAST</span>
+          <strong>Soul Notes</strong>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a class="active" href="index.html">Нүүр</a>
+        <a href="podcast.html">Podcast</a>
+        <a href="contact.html">Захидал</a>
+      </nav>
+
+      <button id="menuBtn" class="menu-btn" type="button">☰</button>
+    </div>
+
+    <div id="mobileNav" class="mobile-nav container">
+      <a href="index.html">Нүүр</a>
+      <a href="podcast.html">Podcast</a>
+      <a href="contact.html">Захидал</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-copy">
+        <span class="pill">Soul Notes Podcast</span>
+        <h1>Сэтгэлд хүрэх яриа, захидал, мэдрэмж.</h1>
+        <p>
+          Soul Notes бол захидал, подкаст, түүх, мэдрэмжийг зөөлөн өнгө төрхтэй,
+          орчин үеийн байдлаар хүргэх дижитал орон зай юм.
+        </p>
+
+        <div class="hero-actions">
+          <a href="podcast.html" class="btn btn-primary">Подкаст үзэх</a>
+          <a href="contact.html" class="btn btn-secondary">Захиа илгээх</a>
+        </div>
+      </div>
+
+      <div class="hero-card hero-video-card">
+        <div class="hero-video-shell">
+          <div class="hero-video-badge">Онцлох</div>
+
+          <div class="hero-highlight-media">
+            <video id="highlightVideo" autoplay muted loop playsinline></video>
+          </div>
+
+          <div class="hero-video-meta">
+            <div class="hero-video-meta-text">
+              <span class="mini-label">Сонирхолтой хэсэг</span>
+              <h3 id="highlightTitle">Сагсны тэмцээн...</h3>
+              <p id="highlightDesc">4 дүгээр дугаар</p>
+            </div>
+
+            <a href="podcast.html" class="text-link">Бүгдийг үзэх →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features container">
+      <div class="section-head">
+        <span class="pill">Soul Notes Podcast Club</span>
+        <h2>Сонирхолтой түүхээр аялцгаая</h2>
+        <p>
+          Подкаст сонсох, үзэх, татах, мөн захиа илгээх боломжтой.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">🎧</div>
+          <h3>Подкаст</h3>
+          <p>Видео болон аудио хэлбэрээр подкастаа үзэж, сонсох боломжтой.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">⬇️</div>
+          <h3>Татах</h3>
+          <p>Татах үед video эсвэл audio гэсэн хоёр сонголт гарч ирнэ.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">💌</div>
+          <h3>Захидал</h3>
+          <p>Захиагаа өөрөө бичиж эсвэл аудиогоо текст болгож илгээж болно.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

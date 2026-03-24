@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Soul Notes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span class="brand-top">PODCAST</span>
+          <strong>Soul Notes</strong>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Нүүр</a>
+        <a href="podcast.html">Podcast</a>
+        <a class="active" href="contact.html">Захидал</a>
+      </nav>
+
+      <button id="menuBtn" class="menu-btn" type="button">☰</button>
+    </div>
+
+    <div id="mobileNav" class="mobile-nav container">
+      <a href="index.html">Нүүр</a>
+      <a href="podcast.html">Podcast</a>
+      <a href="contact.html">Захидал</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro">
+      <span class="pill">Contact</span>
+      <h1>Захиа илгээх</h1>
+      <p>
+        Ангиллаа сонгоод захиагаа бичээрэй. Мөн microphone ашиглаад шууд яриагаа текст болгоод илгээж болно.
+      </p>
+    </section>
+
+    <section class="contact-clean-wrap card-soft">
+      <form id="contactForm" class="contact-clean-form">
+        <label class="form-block">
+          <span>Ангилал</span>
+          <select id="contactCategory" required>
+            <option value="">Сонгох</option>
+            <option value="Ерөнхий захиа">Үерхэл нөхөрлөл</option>
+            <option value="Подкастын санал">Сэтгэл зүйн асуудлууд</option>
+            <option value="Хамтрах санал">Гэр бүлийн асуудлууд</option>
+            <option value="Асуулт">Хөгжилтэй түүхүүд</option>
+            <option value="Санал хүсэлт">Бусад</option>
+          </select>
+        </label>
+
+        <label class="form-block">
+          <span>Зурвас</span>
+          <textarea
+            id="contactMessage"
+            rows="10"
+            placeholder="Энд захиагаа бичнэ үү..."
+            required
+          ></textarea>
+        </label>
+
+        <div class="voice-row">
+          <button id="micBtn" type="button" class="btn btn-secondary">🎙 Дуугаар бичих</button>
+          <button id="stopMicBtn" type="button" class="btn btn-secondary hidden">Зогсоох</button>
+          <span id="micStatus" class="voice-status">Microphone idle</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary contact-submit-btn">Илгээх</button>
+        <p id="formStatus" class="form-status-text"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/contact.js"></script>
+</body>
+</html>
