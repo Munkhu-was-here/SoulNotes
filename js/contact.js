@@ -156,4 +156,15 @@ const res = await fetch("/api/contact", {
     transcript: ""
   })
 });
-setupSpeechRecognition();
+
+fetch("/api/contact", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    category,
+    message,
+    transcript: ""
+  })
+})

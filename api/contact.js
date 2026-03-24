@@ -8,20 +8,18 @@ export default async function handler(req, res) {
   const { category, message, transcript } = req.body;
 
   if (!category || !message) {
-    return res.status(400).json({
-      message: "Category and message required"
-    });
+    return res.status(400).json({ message: "Category and message required" });
   }
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS
-    }
-  });
-
   try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+      }
+    });
+
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
@@ -37,13 +35,9 @@ export default async function handler(req, res) {
       ].join("\n")
     });
 
-    return res.status(200).json({
-      message: "Амжилттай илгээгдлээ."
-    });
+    return res.status(200).json({ message: "Амжилттай илгээгдлээ." });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Илгээхэд алдаа гарлаа."
-    });
+    console.error("MAIL ERROR:", error);
+    return res.status(500).json({ message: "Илгээхэд алдаа гарлаа." });
   }
 }
