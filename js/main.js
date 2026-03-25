@@ -10,7 +10,7 @@ if (menuBtn && mobileNav) {
 const videoEl = document.getElementById("highlightVideo");
 
 if (videoEl) {
-  videoEl.src = "assets/videos/Highlight1.mp4";
+  videoEl.src = "assets/Highlight1.mp4";
   videoEl.muted = true;
   videoEl.loop = true;  
   videoEl.autoplay = true;

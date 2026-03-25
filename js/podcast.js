@@ -104,7 +104,8 @@ function selectPodcast(id) {
 
   currentPodcast = item;
 
-  mainVideo.src = item.video || "";
+  renderMainMedia(item);
+
   podcastTitle.textContent = item.title || "Untitled";
   podcastDescription.textContent = item.description || "";
   podcastDate.textContent = formatDate(item.date);
@@ -117,7 +118,6 @@ function selectPodcast(id) {
 
   highlightActive();
 }
-
 function highlightActive() {
   const items = podcastList.querySelectorAll(".podcast-card-item");
   items.forEach((item) => {
@@ -286,3 +286,38 @@ audioMode.addEventListener("click", () => {
   video.play();
 });
 loadPodcasts();
+
+function getYouTubeId(url) {
+  if (!url) return null;
+
+  const regExp =
+    /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([^&?/]+)/;
+  const match = url.match(regExp);
+  return match ? match[1] : null;
+}
+
+function renderMainMedia(item) {
+  if (!mainVideo) return;
+
+  const youtubeId = getYouTubeId(item.video);
+
+  if (youtubeId) {
+    mainVideo.innerHTML = `
+      <div class="youtube-player-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1"
+          title="${escapeHtml(item.title || "Podcast video")}"
+          frameborder="0"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    `;
+  } else {
+    mainVideo.innerHTML = `
+      <video id="nativeVideo" controls playsinline>
+        <source src="${item.video || ""}" type="video/mp4" />
+      </video>
+    `;
+  }
+}
