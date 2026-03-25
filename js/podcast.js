@@ -16,6 +16,9 @@ const podcastTitle = document.getElementById("podcastTitle");
 const podcastDescription = document.getElementById("podcastDescription");
 const podcastDate = document.getElementById("podcastDate");
 
+const videoMode = document.getElementById("videoMode");
+const audioMode = document.getElementById("audioMode");
+
 const downloadBtn = document.getElementById("downloadBtn");
 const downloadModal = document.getElementById("downloadModal");
 const closeDownloadModal = document.getElementById("closeDownloadModal");
@@ -25,6 +28,7 @@ const downloadAudioLink = document.getElementById("downloadAudioLink");
 let podcasts = [];
 let filteredPodcasts = [];
 let currentPodcast = null;
+let currentMode = "video";
 
 async function loadPodcasts() {
   try {
@@ -62,7 +66,7 @@ function renderPodcastList(list) {
     podcastList.innerHTML = `
       <div class="podcast-empty-state">
         <h4>Подкаст олдсонгүй</h4>
-        <p>Өөр түлхүүр үгээр хайж үзээрэй.</p>
+        <p>Өөр үгээр хайж үзээрэй.</p>
       </div>
     `;
     return;
@@ -103,8 +107,7 @@ function selectPodcast(id) {
   if (!item) return;
 
   currentPodcast = item;
-
-  renderMainMedia(item);
+  currentMode = "video";
 
   podcastTitle.textContent = item.title || "Untitled";
   podcastDescription.textContent = item.description || "";
@@ -113,11 +116,64 @@ function selectPodcast(id) {
   downloadVideoLink.href = item.video || "#";
   downloadAudioLink.href = item.audio || "#";
 
-  downloadVideoLink.setAttribute("download", getFileName(item.video, "video.mp4"));
-  downloadAudioLink.setAttribute("download", getFileName(item.audio, "audio.mp3"));
+  downloadVideoLink.setAttribute("download", getFileName(item.video, "video"));
+  downloadAudioLink.setAttribute("download", getFileName(item.audio, "audio"));
 
+  renderMainMedia();
   highlightActive();
 }
+
+function renderMainMedia() {
+  if (!currentPodcast || !mainVideo) return;
+
+  if (currentMode === "audio") {
+    mainVideo.innerHTML = `
+      <div class="audio-player-wrap">
+        <div class="audio-player-inner">
+          <p class="audio-label">Audio Mode</p>
+          <audio controls style="width:100%;">
+            <source src="${currentPodcast.audio || ""}">
+          </audio>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const youtubeId = getYouTubeId(currentPodcast.video);
+
+  if (youtubeId) {
+    mainVideo.innerHTML = `
+      <div class="youtube-player-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1"
+          title="${escapeHtml(currentPodcast.title || "Podcast video")}"
+          frameborder="0"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    `;
+    return;
+  }
+
+  mainVideo.innerHTML = `
+    <div class="youtube-player-wrap">
+      <video controls playsinline style="width:100%; height:100%; display:block;">
+        <source src="${currentPodcast.video || ""}">
+      </video>
+    </div>
+  `;
+}
+
+function getYouTubeId(url) {
+  if (!url) return null;
+  const regExp =
+    /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([^&?/]+)/;
+  const match = url.match(regExp);
+  return match ? match[1] : null;
+}
+
 function highlightActive() {
   const items = podcastList.querySelectorAll(".podcast-card-item");
   items.forEach((item) => {
@@ -127,8 +183,12 @@ function highlightActive() {
 }
 
 function renderEmptyPlayer(message = "Одоогоор подкаст алга.") {
-  mainVideo.removeAttribute("src");
-  mainVideo.load();
+  mainVideo.innerHTML = `
+    <div class="podcast-empty-state">
+      <h4>Подкаст байхгүй</h4>
+      <p>${message}</p>
+    </div>
+  `;
   podcastTitle.textContent = "Подкаст байхгүй";
   podcastDescription.textContent = message;
   podcastDate.textContent = "";
@@ -200,6 +260,22 @@ if (podcastSearch) {
   });
 }
 
+if (videoMode) {
+  videoMode.addEventListener("click", () => {
+    if (!currentPodcast) return;
+    currentMode = "video";
+    renderMainMedia();
+  });
+}
+
+if (audioMode) {
+  audioMode.addEventListener("click", () => {
+    if (!currentPodcast) return;
+    currentMode = "audio";
+    renderMainMedia();
+  });
+}
+
 function openDownloadModal() {
   downloadModal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
@@ -234,90 +310,5 @@ window.addEventListener("keydown", (e) => {
     closeDownloadPopup();
   }
 });
-const video = document.getElementById("mainVideo");
-const playBtn = document.getElementById("playBtn");
-const progress = document.getElementById("progressBar");
-const currentTimeEl = document.getElementById("currentTime");
-const durationEl = document.getElementById("duration");
 
-let isPlaying = false;
-
-playBtn.addEventListener("click", () => {
-  if (!isPlaying) {
-    video.play();
-    playBtn.textContent = "⏸";
-  } else {
-    video.pause();
-    playBtn.textContent = "▶";
-  }
-  isPlaying = !isPlaying;
-});
-
-video.addEventListener("timeupdate", () => {
-  const percent = (video.currentTime / video.duration) * 100;
-  progress.value = percent;
-
-  currentTimeEl.textContent = formatTime(video.currentTime);
-  durationEl.textContent = formatTime(video.duration);
-});
-
-progress.addEventListener("input", () => {
-  video.currentTime = (progress.value / 100) * video.duration;
-});
-
-function formatTime(sec) {
-  if (!sec) return "0:00";
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60).toString().padStart(2, "0");
-  return `${m}:${s}`;
-}
-const videoMode = document.getElementById("videoMode");
-const audioMode = document.getElementById("audioMode");
-
-videoMode.addEventListener("click", () => {
-  if (!currentPodcast) return;
-  video.src = currentPodcast.video;
-  video.play();
-});
-
-audioMode.addEventListener("click", () => {
-  if (!currentPodcast) return;
-  video.src = currentPodcast.audio;
-  video.play();
-});
 loadPodcasts();
-
-function getYouTubeId(url) {
-  if (!url) return null;
-
-  const regExp =
-    /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([^&?/]+)/;
-  const match = url.match(regExp);
-  return match ? match[1] : null;
-}
-
-function renderMainMedia(item) {
-  if (!mainVideo) return;
-
-  const youtubeId = getYouTubeId(item.video);
-
-  if (youtubeId) {
-    mainVideo.innerHTML = `
-      <div class="youtube-player-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1"
-          title="${escapeHtml(item.title || "Podcast video")}"
-          frameborder="0"
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
-    `;
-  } else {
-    mainVideo.innerHTML = `
-      <video id="nativeVideo" controls playsinline>
-        <source src="${item.video || ""}" type="video/mp4" />
-      </video>
-    `;
-  }
-}
