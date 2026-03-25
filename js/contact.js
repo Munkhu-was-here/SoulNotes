@@ -18,14 +18,14 @@ const micStatus = document.getElementById("micStatus");
 
 let recognition = null;
 let isListening = false;
-let finalTranscriptBuffer = "";
+let savedText = "";
 
 function setupSpeechRecognition() {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
-    micStatus.textContent = "Энэ browser дээр voice input ажиллахгүй байна.";
+    micStatus.textContent = "Энэ browser дээр voice input дэмжигдэхгүй байна.";
     micBtn.disabled = true;
     return;
   }
@@ -34,13 +34,14 @@ function setupSpeechRecognition() {
   recognition.lang = "mn-MN";
   recognition.interimResults = true;
   recognition.continuous = true;
+  recognition.maxAlternatives = 1;
 
   recognition.onstart = () => {
     isListening = true;
+    savedText = contactMessage.value.trim();
     micStatus.textContent = "Сонсож байна...";
     micBtn.classList.add("hidden");
     stopMicBtn.classList.remove("hidden");
-    finalTranscriptBuffer = contactMessage.value.trim();
   };
 
   recognition.onresult = (event) => {
@@ -56,7 +57,7 @@ function setupSpeechRecognition() {
       }
     }
 
-    const merged = [finalTranscriptBuffer, finalText.trim(), interimText.trim()]
+    const merged = [savedText, finalText.trim(), interimText.trim()]
       .filter(Boolean)
       .join(" ")
       .replace(/\s+/g, " ")
@@ -66,7 +67,7 @@ function setupSpeechRecognition() {
   };
 
   recognition.onerror = (event) => {
-    micStatus.textContent = `Voice input алдаа: ${event.error}`;
+    micStatus.textContent = `Microphone алдаа: ${event.error}`;
     isListening = false;
     micBtn.classList.remove("hidden");
     stopMicBtn.classList.add("hidden");
@@ -74,17 +75,23 @@ function setupSpeechRecognition() {
 
   recognition.onend = () => {
     isListening = false;
+    savedText = contactMessage.value.trim();
     micStatus.textContent = "Microphone зогслоо";
     micBtn.classList.remove("hidden");
     stopMicBtn.classList.add("hidden");
-    finalTranscriptBuffer = contactMessage.value.trim();
   };
 }
 
 if (micBtn) {
-  micBtn.addEventListener("click", () => {
+  micBtn.addEventListener("click", async () => {
     if (!recognition || isListening) return;
-    recognition.start();
+
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      recognition.start();
+    } catch (error) {
+      micStatus.textContent = "Microphone permission өгөөгүй байна.";
+    }
   });
 }
 
@@ -123,8 +130,7 @@ if (contactForm) {
         },
         body: JSON.stringify({
           category,
-          message,
-          transcript: ""
+          message
         })
       });
 
@@ -138,33 +144,12 @@ if (contactForm) {
       formStatus.textContent = data.message || "Амжилттай илгээгдлээ.";
       contactForm.reset();
       micStatus.textContent = "Microphone idle";
-      finalTranscriptBuffer = "";
+      savedText = "";
     } catch (error) {
       formStatus.textContent = "Server-тэй холбогдоход алдаа гарлаа.";
       console.error(error);
     }
   });
 }
-const res = await fetch("/api/contact", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    category,
-    message,
-    transcript: ""
-  })
-});
 
-fetch("/api/contact", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    category,
-    message,
-    transcript: ""
-  })
-})
+setupSpeechRecognition();
